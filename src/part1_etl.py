@@ -7,6 +7,19 @@ PART 1: ETL
 import pandas as pd
 
 def extract_transform():
+    """
+    Extracts and loads data from CSV files for analysis.
+
+    This function reads three datasets: `pred_universe`, `charge_counts`, and `charge_counts_by_offense`
+    from CSV files located in the `./data/` directory. It prints the columns and sample data from each
+    DataFrame for debugging purposes.
+
+    Returns:
+        tuple: A tuple containing three DataFrames:
+            - charge_counts (DataFrame): DataFrame with charge counts aggregated by charge degree.
+            - pred_universe (DataFrame): DataFrame with predictions for felony and non-felony rearrests.
+            - charge_counts_by_offense (DataFrame): DataFrame with charge counts aggregated by offense category.
+            """
     try:
         # Load the datasets
         pred_universe = pd.read_csv('./data/pred_universe.csv')
@@ -37,6 +50,17 @@ def extract_transform():
         return None, None, None
 
 def create_felony_charge():
+    """
+    Creates a DataFrame indicating whether each arrest involved a felony charge.
+
+    This function generates a DataFrame with sample data indicating felony charges. 
+    In practice, this function should be replaced with the actual logic to create 
+    the `felony_charge` DataFrame based on real data.
+
+    Returns:
+        DataFrame: A DataFrame with columns `arrest_id` and `felony` where `felony` 
+        indicates whether the arrest involved a felony charge.
+    """
     try:
         # Assuming the function to create felony charge DataFrame
         # This is an example and should be replaced with actual logic
@@ -55,6 +79,22 @@ def create_felony_charge():
         return None
 
 def merge_felony_pred_universe(felony_charge, pred_universe):
+    """
+    This function combines the `felony_charge` DataFrame, which contains information on whether 
+    an arrest involved a felony charge, with the `pred_universe` DataFrame, which contains 
+    prediction data for rearrests. The merge is performed on the `arrest_id` column using an 
+    inner join.
+
+    Args:
+        felony_charge (pd.DataFrame): DataFrame containing `arrest_id` and a boolean `felony` 
+                                      indicating whether each arrest involved a felony charge.
+        pred_universe (pd.DataFrame): DataFrame containing `arrest_id`, `prediction_felony`, 
+                                      and `prediction_nonfelony` for each arrest.
+
+    Returns:
+        pd.DataFrame: A DataFrame resulting from the merge of `felony_charge` and `pred_universe`, 
+                      including columns from both DataFrames.
+    """
     try:
         # Merge the felony_charge DataFrame with pred_universe DataFrame
         merged_data = pd.merge(felony_charge, pred_universe, on='arrest_id', how='inner')
