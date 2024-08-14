@@ -20,50 +20,61 @@ importlib.reload(part4)
 importlib.reload(part5)
 
 def main():
-    print("Running main.py")
-    # Load and process the data
-    charge_counts, pred_universe, charge_counts_by_offense = part1.extract_transform()
+    try:
+        print("Running main.py")
+        
+        # Load and process the data
+        charge_counts, pred_universe, charge_counts_by_offense = part1.extract_transform()
+        print("Data loaded successfully.")
 
-    # Merging data
-    felony_charge = part1.create_felony_charge()
-    merged_data = part1.merge_felony_pred_universe(felony_charge, pred_universe)
+        # Merging data
+        felony_charge = part1.create_felony_charge()
+        merged_data = part1.merge_felony_pred_universe(felony_charge, pred_universe)
+        merged_df = part4.merge_felony_charge(pred_universe, felony_charge)
+        
+        # Print DataFrames to verify
+        print("Columns in pred_universe:", pred_universe.columns)
+        print("Sample data from pred_universe:")
+        print(pred_universe.head())
 
-    # Debugging: Print DataFrames to verify
-    print("Columns in pred_universe:", pred_universe.columns)
-    print("Sample data from pred_universe:")
-    print(pred_universe.head())
+        print("Columns in charge_counts:", charge_counts.columns)
+        print("Sample data from charge_counts:")
+        print(charge_counts.head())
 
-    print("Columns in charge_counts:", charge_counts.columns)
-    print("Sample data from charge_counts:")
-    print(charge_counts.head())
+        print("Columns in charge_counts_by_offense:", charge_counts_by_offense.columns)
+        print("Sample data from charge_counts_by_offense:")
+        print(charge_counts_by_offense.head())
 
-    print("Columns in charge_counts_by_offense:", charge_counts_by_offense.columns)
-    print("Sample data from charge_counts_by_offense:")
-    print(charge_counts_by_offense.head())
+        print("Columns in felony_charge:", felony_charge.columns)
+        print("Sample data from felony_charge:")
+        print(felony_charge.head())
 
-    print("Columns in felony_charge:", felony_charge.columns)
-    print("Sample data from felony_charge:")
-    print(felony_charge.head())
+        print("Columns in merged_data:", merged_data.columns)
+        print("Sample data from merged_data:")
+        print(merged_data.head())
 
-    print("Columns in merged_data:", merged_data.columns)
-    print("Sample data from merged_data:")
-    print(merged_data.head())
+        # Part 2: Generate categorical plots
+        part2.cat_plots(charge_counts, pred_universe)
+        
+        # Part 3: Generate bar and histogram plots
+        part3.part3_bar_plots(pred_universe)  # Updated function name
+        part3.part3_histograms(pred_universe)  # Updated function name
 
-    # Part 2: Generate categorical plots
-    part2.cat_plots(charge_counts, pred_universe)
-    
-    # Part 3: Generate bar and histogram plots
-    part3.part3_bar_plots(pred_universe)  # Updated function name
-    part3.part3_histograms(pred_universe)  # Updated function name
+        # Part 4: Generate additional categorical plots
+        part4.cat_plots(charge_counts, pred_universe)
 
-    # Part 4: Generate additional categorical plots
-    part4.catplot_plot(pred_universe)
-    
-    # Part 5: Generate scatter plots
-    part5.scatterplot(pred_universe)
+        # Part 5: Generate scatter plots
+        part5.scatterplot_felony_vs_nonfelony(merged_df)
+        part5.scatterplot_felony_prediction_vs_actual_rearrest(merged_df)
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 if __name__ == "__main__":
     main()
+
+
+
 
 
 

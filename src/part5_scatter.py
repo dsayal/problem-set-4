@@ -16,10 +16,11 @@ def scatterplot_felony_vs_nonfelony(merged_df):
     Parameters:
     - merged_df dataframe (merged pred_universe and felony_charge)
     '''
+    # Ensure 'felony' is used as the hue parameter if 'has_felony_charge' is not available
     sns.lmplot(data=merged_df,
                x='prediction_felony',
                y='prediction_nonfelony',
-               hue='has_felony_charge',
+               hue='felony',  # Use 'felony' instead of 'has_felony_charge'
                fit_reg=False)
     plt.title('Prediction for Felony vs. Non-Felony Rearrest')
     plt.savefig('./data/part5_plots/scatterplot_felony_vs_nonfelony.png', bbox_inches='tight')
@@ -28,6 +29,10 @@ def scatterplot_felony_vs_nonfelony(merged_df):
     # Print statement to address the right-side dots
     print("The group of dots on the right side of the plot represents individuals with high predictions for both felony and nonfelony rearrest. This group might include those who are considered high-risk by the model regardless of the type of charge.")
 
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+
 def scatterplot_felony_prediction_vs_actual_rearrest(merged_df):
     '''
     Creates a scatter plot where the x-axis is prediction for felony rearrest and the y-axis is whether someone was actually rearrested.
@@ -35,15 +40,26 @@ def scatterplot_felony_prediction_vs_actual_rearrest(merged_df):
     Parameters:
     - merged_df dataframe (merged pred_universe and felony_charge)
     '''
+    # Print column names to debug
+    print("Columns in merged_df for scatterplot_felony_prediction_vs_actual_rearrest:", merged_df.columns)
+    
+    # Ensure you are using the correct column for the y-axis
+    actual_column_name = 'felony'  # Change this to the actual column name you have
+
+    if actual_column_name not in merged_df.columns:
+        raise KeyError(f"{actual_column_name} not found in DataFrame columns.")
+    
+    # Scatter plot
     sns.scatterplot(data=merged_df,
                     x='prediction_felony',
-                    y='actual_rearrest_felony')  # Replace 'actual_rearrest_felony' with the actual column name if different
+                    y=actual_column_name)
     plt.title('Prediction for Felony Rearrest vs. Actual Felony Rearrest')
     plt.savefig('./data/part5_plots/scatterplot_felony_prediction_vs_actual_rearrest.png', bbox_inches='tight')
     plt.close()
 
-    # Print statement to address model calibration
-    print("Based on this plot, if there is a clear separation between high prediction values and actual rearrest occurrences, the model might be well-calibrated. If there is no clear pattern or significant overlap, the model may need adjustment to improve calibration.")
+    print("Scatter plot for felony prediction vs. actual felony rearrest generated.")
+
+
 
 # Example usage:
 # merged_df = merge_felony_charge(pred_universe, felony_charge)  # Ensure this is called before creating plots
