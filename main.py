@@ -11,6 +11,19 @@ import src.part4_catplot as part4
 import src.part5_scatter as part5
 
 import pandas as pd
+import os
+
+# Create directories if they don't exist
+directories = [
+    './data/part2_plots',
+    './data/part3_plots',
+    './data/part4_plots',
+    './data/part5_plots'
+]
+
+for directory in directories:
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 
 def main():
     ##  PART 1: ETL  ##
