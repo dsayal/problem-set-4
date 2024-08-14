@@ -4,10 +4,10 @@ PART 4: CATEGORICAL PLOTS
 - Update main() in main.py to generate the plots and print statments when called
 - All plots should be output as PNG files to `data/part4_plots`
 '''
-import os
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+import os
 
 def create_felony_charge(arrest_events):
     '''
@@ -39,7 +39,7 @@ def merge_felony_charge(pred_universe, felony_charge):
     merged_df = pd.merge(pred_universe, felony_charge, on='arrest_id')
     return merged_df
 
-def part4_catplot(pred_universe, arrest_events):
+def cat_plots(pred_universe, arrest_events):
     '''
     Creates categorical plots
     
@@ -47,6 +47,7 @@ def part4_catplot(pred_universe, arrest_events):
     - pred_universe dataframe
     - arrest_events dataframe
     '''
+    
     # Create felony charge dataframe
     felony_charge = create_felony_charge(arrest_events)
     
@@ -66,7 +67,7 @@ def part4_catplot(pred_universe, arrest_events):
     plt.title('Prediction for Felony Rearrest by Charge Degree')
     plt.savefig(f'{output_dir}/catplot_felony_rearrest.png', bbox_inches='tight')
     plt.close()
-
+    
     # 2. Catplot for prediction of non-felony rearrest by charge type
     sns.catplot(data=merged_df,
                 x='charge_degree',
@@ -78,7 +79,7 @@ def part4_catplot(pred_universe, arrest_events):
     
     # Print statement to address the difference
     print("Differences between felony and non-felony rearrest predictions might be explained by the inherent characteristics of felony versus non-felony offenses. Felonies may have different underlying patterns or risk factors that influence rearrest predictions.")
-
+    
     # 3. Catplot for prediction of felony rearrest by charge type with hue for actual rearrest
     sns.catplot(data=merged_df,
                 x='charge_degree',
@@ -91,4 +92,6 @@ def part4_catplot(pred_universe, arrest_events):
     
     # Print statement to address the hue difference
     print("If predictions for arrestees with current felony charges but who did not get rearrested for a felony are higher than those with a current misdemeanor but who did get rearrested for a felony, it suggests that the model might be overestimating the risk for certain groups or not fully capturing the complexity of rearrest behavior.")
+
+
 
