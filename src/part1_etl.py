@@ -6,59 +6,80 @@ PART 1: ETL
 
 import pandas as pd
 
-def load_data():
-    # Load the datasets
-    pred_universe = pd.read_csv('./data/pred_universe.csv')
-    charge_counts = pd.read_csv('./data/charge_counts.csv')
-    charge_counts_by_offense = pd.read_csv('./data/charge_counts_by_offense.csv')
-    
-    # Print DataFrame columns and sample data
-    print("Columns in pred_universe:", pred_universe.columns)
-    print("Sample data from pred_universe:")
-    print(pred_universe.head())
-    
-    print("Columns in charge_counts:", charge_counts.columns)
-    print("Sample data from charge_counts:")
-    print(charge_counts.head())
-    
-    print("Columns in charge_counts_by_offense:", charge_counts_by_offense.columns)
-    print("Sample data from charge_counts_by_offense:")
-    print(charge_counts_by_offense.head())
-    
-    return pred_universe, charge_counts, charge_counts_by_offense
+def extract_transform():
+    try:
+        # Load the datasets
+        pred_universe = pd.read_csv('./data/pred_universe.csv')
+        charge_counts = pd.read_csv('./data/charge_counts.csv')
+        charge_counts_by_offense = pd.read_csv('./data/charge_counts_by_offense.csv')
+        
+        # Print DataFrame columns and sample data for debugging
+        print("Columns in pred_universe:", pred_universe.columns)
+        print("Sample data from pred_universe:")
+        print(pred_universe.head())
+        
+        print("Columns in charge_counts:", charge_counts.columns)
+        print("Sample data from charge_counts:")
+        print(charge_counts.head())
+        
+        print("Columns in charge_counts_by_offense:", charge_counts_by_offense.columns)
+        print("Sample data from charge_counts_by_offense:")
+        print(charge_counts_by_offense.head())
 
-def process_data(pred_universe, charge_counts, charge_counts_by_offense):
-    # Example processing: Check the columns to ensure data is as expected
-    if 'arrest_id' not in pred_universe.columns:
-        raise ValueError("The 'arrest_id' column is missing in pred_universe.")
-    
-    # Since charge_counts and charge_counts_by_offense do not have 'arrest_id',
-    # you cannot merge them with pred_universe. You might need different processing.
-    
-    # If merging is necessary and you have a common column, adjust accordingly.
-    # For demonstration, we'll just return the DataFrames for now.
-    
-    return charge_counts, charge_counts_by_offense
+        # Return the DataFrames
+        return charge_counts, pred_universe, charge_counts_by_offense
 
-def save_data(charge_counts, charge_counts_by_offense):
-    # Save processed DataFrames if needed
-    charge_counts.to_csv('./data/processed/charge_counts_processed.csv', index=False)
-    charge_counts_by_offense.to_csv('./data/processed/charge_counts_by_offense_processed.csv', index=False)
+    except FileNotFoundError as e:
+        print(f"Error: {e}. Please check the file paths and names.")
+        return None, None, None
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None, None, None
+
+def create_felony_charge():
+    try:
+        # Assuming the function to create felony charge DataFrame
+        # This is an example and should be replaced with actual logic
+        felony_charge = pd.DataFrame({
+            'arrest_id': [1, 2, 3, 4],
+            'felony': [True, False, True, False]
+        })
+        
+        print("Columns in felony_charge:", felony_charge.columns)
+        print("Sample data from felony_charge:")
+        print(felony_charge.head())
+        
+        return felony_charge
+    except Exception as e:
+        print(f"An error occurred in create_felony_charge: {e}")
+        return None
+
+def merge_felony_pred_universe(felony_charge, pred_universe):
+    try:
+        # Merge the felony_charge DataFrame with pred_universe DataFrame
+        merged_data = pd.merge(felony_charge, pred_universe, on='arrest_id', how='inner')
+        
+        print("Columns in merged_data:", merged_data.columns)
+        print("Sample data from merged_data:")
+        print(merged_data.head())
+        
+        return merged_data
+    except Exception as e:
+        print(f"An error occurred in merge_felony_pred_universe: {e}")
+        return None
 
 def main():
-    # Load the data
-    pred_universe, charge_counts, charge_counts_by_offense = load_data()
-    
-    # Process the data
-    charge_counts, charge_counts_by_offense = process_data(pred_universe, charge_counts, charge_counts_by_offense)
-    
-    # Save the processed data
-    save_data(charge_counts, charge_counts_by_offense)
-    
-    print("Data processing complete. Check the 'processed' directory for output files.")
+    # Load and print data
+    charge_counts, pred_universe, charge_counts_by_offense = extract_transform()
+    # Create felony charge DataFrame
+    felony_charge = create_felony_charge()
+    # Merge dataframes
+    merged_data = merge_felony_pred_universe(felony_charge, pred_universe)
 
 if __name__ == "__main__":
     main()
+
+
 
 
 

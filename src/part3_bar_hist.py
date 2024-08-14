@@ -24,10 +24,12 @@ def part3_bar_plots(pred_universe):
     else:
         raise ValueError("Required columns are not present in the DataFrame")
 
+
+
 def part3_histograms(pred_universe):
     """
     Create histograms for Part 3 of the project.
-    
+
     Arguments:
     - pred_universe: DataFrame containing the prediction-related data
     """
@@ -35,11 +37,22 @@ def part3_histograms(pred_universe):
     print(pred_universe.head())
     print(pred_universe.columns)
     
-    # Plot histogram of 'age_at_arrest'
+    # Plot histogram of 'prediction_felony'
     plt.figure(figsize=(10, 6))
-    sns.histplot(pred_universe['age_at_arrest'])
-    plt.title('Histogram of Age at Arrest')
-    plt.savefig('./data/part3_plots/histogram_age_at_arrest.png', bbox_inches='tight')
+    sns.histplot(pred_universe['prediction_felony'], bins=10, kde=True)
+    plt.title('Histogram of Prediction Felony')
+    plt.xlabel('Prediction Felony')
+    plt.ylabel('Frequency')
+    plt.savefig('./data/part3_plots/histogram_prediction_felony.png', bbox_inches='tight')
+    plt.close()
+
+    # Plot histogram of 'prediction_nonfelony'
+    plt.figure(figsize=(10, 6))
+    sns.histplot(pred_universe['prediction_nonfelony'], bins=10, kde=True)
+    plt.title('Histogram of Prediction Non-Felony')
+    plt.xlabel('Prediction Non-Felony')
+    plt.ylabel('Frequency')
+    plt.savefig('./data/part3_plots/histogram_prediction_nonfelony.png', bbox_inches='tight')
     plt.close()
 
 
