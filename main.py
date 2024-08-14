@@ -10,10 +10,8 @@ import src.part3_bar_hist as part3
 import src.part4_catplot as part4
 import src.part5_scatter as part5
 
-
-
 def main():
-    ##  PART 1: ETL  ##
+    ## PART 1: ETL 
     # ETL the datasets into dataframes
     pred_universe, arrest_events, charge_counts, charge_counts_by_offense = part1.extract_transform()
     
@@ -30,7 +28,7 @@ def main():
     print(charge_counts_by_offense.head())
     print(charge_counts_by_offense.columns)
 
-    ##  PART 2: PLOT EXAMPLES  ##
+    ## PART 2: PLOT EXAMPLES ##
     # Apply plot theme
     part2.seaborn_settings()
 
@@ -40,18 +38,19 @@ def main():
     part2.histograms(pred_universe)
     part2.scatterplot(pred_universe)
 
-    ##  PART 3: BAR PLOTS AND HISTOGRAMS  ##
+    ## PART 3: BAR PLOTS AND HISTOGRAMS ##
     part3.part3_bar_plots(pred_universe)
     part3.part3_histograms(pred_universe)
 
-    ##  PART 4: CATEGORICAL PLOTS  ##
-    part4.part4_catplots(pred_universe, charge_counts)
+    ## PART 4: CATEGORICAL PLOTS ##
+    part4.part4_catplot(pred_universe, charge_counts)
 
-    ##  PART 5: SCATTERPLOTS  ##
+    ## PART 5: SCATTERPLOTS ##
     part5.part5_scatter(pred_universe)
 
 if __name__ == "__main__":
     main()
+
 
 
 
