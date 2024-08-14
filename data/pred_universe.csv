@@ -1,0 +1,5 @@
+arrest_id,charge_degree,prediction_felony,prediction_nonfelony
+1,felony,0.8,0.2
+2,misdemeanor,0.3,0.7
+3,felony,0.6,0.4
+4,misdemeanor,0.4,0.6

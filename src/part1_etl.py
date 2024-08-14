@@ -4,24 +4,68 @@ PART 1: ETL
 - NOTE: You will update this code for PART 4: CATEGORICAL PLOTS
 '''
 
-import pandas as pd 
+import pandas as pd
 
 def extract_transform():
     """
-    Extracts and transforms data from arrest records for analysis
+    Extracts and transforms data from CSV files, and merges them into a single DataFrame.
+    
+    Returns:
+    - pred_universe DataFrame
+    - charge_counts DataFrame
+    - charge_counts_by_offense DataFrame
+    """
+    # Load datasets
+    pred_universe = pd.read_csv('./data/pred_universe.csv')
+    charge_counts = pd.read_csv('./data/charge_counts.csv')
+    charge_counts_by_offense = pd.read_csv('./data/charge_counts_by_offense.csv')
+
+    # Display columns and sample data for debugging
+    print("part1_etl: pred_universe columns and sample data:")
+    print(pred_universe.head())
+    print(pred_universe.columns)
+
+    print("part1_etl: charge_counts columns and sample data:")
+    print(charge_counts.head())
+    print(charge_counts.columns)
+
+    print("part1_etl: charge_counts_by_offense columns and sample data:")
+    print(charge_counts_by_offense.head())
+    print(charge_counts_by_offense.columns)
+
+    # Merge dataframes as needed
+    # Example merge (assuming 'charge_degree' is a common column)
+    merged_df = pd.merge(pred_universe, charge_counts, on='charge_degree', how='left')
+    
+    # Save the merged DataFrame for later use
+    merged_df.to_csv('./data/merged_data.csv', index=False)
+
+    return pred_universe, charge_counts, charge_counts_by_offense
+
+def create_felony_charge(pred_universe):
+    """
+    Creates a DataFrame indicating whether each arrest had at least one felony charge.
+
+    Parameters:
+    - pred_universe DataFrame
 
     Returns:
-        - `pred_universe`: The dataframe containing prediction-related data for individuals
-        - `arrest_events`: The dataframe containing arrest event data
-        - `charge_counts`: A dataframe with counts of charges aggregated by charge degree
-        - `charge_counts_by_offense`: A dataframe with counts of charges aggregated by both charge degree and offense category
+    - felony_charge DataFrame
     """
-    # Extracts arrest data CSVs into dataframes
-    pred_universe = pd.read_csv('https://www.dropbox.com/scl/fi/a2tpqpvkdc8n6advvkpt7/universe_lab9.csv?rlkey=839vsc25njgfftzakr34w2070&dl=1')
-    arrest_events = pd.read_csv('https://www.dropbox.com/scl/fi/n47jt4va049gh2o4bysjm/arrest_events_lab9.csv?rlkey=u66usya2xjgf8gk2acq7afk7m&dl=1')
+    felony_charge = pred_universe[pred_universe['charge_degree'] == 'felony']
+    return felony_charge
 
-    # Creates two additional dataframes using groupbys
-    charge_counts = arrest_events.groupby(['charge_degree']).size().reset_index(name='count')
-    charge_counts_by_offense = arrest_events.groupby(['charge_degree', 'offense_category']).size().reset_index(name='count')
-    
-    return pred_universe, arrest_events, charge_counts, charge_counts_by_offense
+def merge_felony_pred_universe(pred_universe, felony_charge):
+    """
+    Merges the felony charge data with the prediction universe.
+
+    Parameters:
+    - pred_universe DataFrame
+    - felony_charge DataFrame
+
+    Returns:
+    - merged_felony_pred DataFrame
+    """
+    merged_felony_pred = pd.merge(pred_universe, felony_charge, on='arrest_id', how='left')
+    return merged_felony_pred
+

@@ -54,20 +54,22 @@ def cat_plots(charge_counts, pred_universe):
 
     Parameters:
     - charge_counts dataframe
-    - pred_universe dateframe
+    - pred_universe dataframe
 
     Returns:
     - Categorical bar plot for charge degree counts
-    - Categorical bar plot for non-felony predictions by sex
+    - Categorical bar plot for prediction_nonfelony by charge degree
     '''
+    # Bar plot for charge degree counts
     sns.catplot(data=charge_counts,
                 x='charge_degree',
                 y='count', 
                 kind='bar')
     plt.savefig('./data/part2_plots/catplot1.png', bbox_inches='tight')
 
+    # Bar plot for prediction_nonfelony by charge degree
     sns.catplot(data=pred_universe, 
-                x='sex',
+                x='charge_degree',
                 y='prediction_nonfelony', 
                 kind='bar')
     plt.savefig('./data/part2_plots/catplot2.png', bbox_inches='tight')
@@ -112,20 +114,21 @@ def scatterplot(pred_universe):
     - Scatterplot without a regression line
     - Scatterplot with a regression line
     - Scatterplot with a custom diagonal line
-    - Scatterplot with hue by race
-    - Scatterplot faceted by sex with hue by race
     '''
+    # Scatterplot without a regression line
     sns.lmplot(data=pred_universe, 
                x='prediction_felony', 
                y='prediction_nonfelony',
                fit_reg=False)
     plt.savefig('./data/part2_plots/scatterplot1.png', bbox_inches='tight')
 
+    # Scatterplot with a regression line
     sns.lmplot(data=pred_universe, 
                x='prediction_felony', 
                y='prediction_nonfelony')
     plt.savefig('./data/part2_plots/scatterplot2.png', bbox_inches='tight')
 
+    # Scatterplot with a custom diagonal line
     sp = sns.lmplot(data=pred_universe, 
                     x='prediction_felony', 
                     y='prediction_nonfelony')
@@ -135,27 +138,3 @@ def scatterplot(pred_universe):
                  dashes=(2, 2))
     plt.savefig('./data/part2_plots/scatterplot3.png', bbox_inches='tight')
 
-    sp = sns.lmplot(data=pred_universe, 
-                    x='prediction_felony', 
-                    y='prediction_nonfelony', 
-                    hue='race')
-    sp.ax.axline(xy1=(0, 0), 
-                 xy2=(1, 1), 
-                 color='b', 
-                 dashes=(2, 2))
-    plt.savefig('./data/part2_plots/scatterplot4.png', bbox_inches='tight')
-
-    sp = sns.lmplot(data=pred_universe, 
-                    x='prediction_felony', 
-                    y='prediction_nonfelony', 
-                    hue='race', 
-                    col='sex')
-    sp.axes[0][0].axline(xy1=(1, 1), 
-                         slope=1, 
-                         color='b', 
-                         dashes=(2, 2))
-    sp.axes[0][1].axline(xy1=(1, 1), 
-                         slope=1, 
-                         color='b', 
-                         dashes=(2, 2))
-    plt.savefig('./data/part2_plots/scatterplot5.png', bbox_inches='tight')
