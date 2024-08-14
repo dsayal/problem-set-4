@@ -1,56 +1,45 @@
-import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
 def part3_bar_plots(pred_universe):
-    '''
-    Creates bar plots for the 'fta' column in pred_universe and hues by sex
-    
-    Parameters:
-    - pred_universe dataframe
-    '''
-    # Create a bar plot for the 'fta' column
-    sns.barplot(data=pred_universe, 
-                x='fta', 
-                y='count')  # Adjust if 'count' is not in pred_universe
-    plt.title('Bar Plot of FTA Counts')
-    plt.savefig('./data/part3_plots/barplot_fta.png', bbox_inches='tight')
-    plt.close()
+    """
+    Creates bar plots from the pred_universe DataFrame.
 
-    # Create a bar plot for the 'fta' column, with hue by sex
-    sns.barplot(data=pred_universe, 
-                x='fta', 
-                y='count', 
-                hue='sex')  # Adjust if 'count' is not in pred_universe
-    plt.title('Bar Plot of FTA Counts by Sex')
-    plt.savefig('./data/part3_plots/barplot_fta_by_sex.png', bbox_inches='tight')
-    plt.close()
+    Args:
+        pred_universe (pd.DataFrame): The DataFrame containing prediction-related data for individuals.
+    """
+    # Example of creating a bar plot with available columns
+    # Assuming you want to plot counts of felony and non-felony predictions
+    if 'prediction_felony' in pred_universe.columns and 'prediction_nonfelony' in pred_universe.columns:
+        felony_counts = pred_universe['prediction_felony'].value_counts().reset_index()
+        felony_counts.columns = ['prediction_felony', 'count']
+        
+        plt.figure(figsize=(10, 6))
+        sns.barplot(data=felony_counts, x='prediction_felony', y='count')
+        plt.title('Counts of Felony Predictions')
+        plt.xlabel('Prediction of Felony')
+        plt.ylabel('Count')
+        plt.savefig('./data/part3_plots/felony_predictions.png', bbox_inches='tight')
+        plt.close()
+    else:
+        raise ValueError("Required columns are not present in the DataFrame")
 
 def part3_histograms(pred_universe):
-    '''
-    Creates histograms for the 'age_at_arrest' column in pred_universe
+    """
+    Create histograms for Part 3 of the project.
     
-    Parameters:
-    - pred_universe dataframe
-    '''
-    # Plot histogram of age_at_arrest
-    sns.histplot(data=pred_universe, 
-                 x='age_at_arrest')
+    Arguments:
+    - pred_universe: DataFrame containing the prediction-related data
+    """
+    print("part3_histograms: pred_universe columns and sample data:")
+    print(pred_universe.head())
+    print(pred_universe.columns)
+    
+    # Plot histogram of 'age_at_arrest'
+    plt.figure(figsize=(10, 6))
+    sns.histplot(pred_universe['age_at_arrest'])
     plt.title('Histogram of Age at Arrest')
     plt.savefig('./data/part3_plots/histogram_age_at_arrest.png', bbox_inches='tight')
     plt.close()
 
-    # Create bins for age groups
-    bins = [18, 21, 30, 40, 100]
-    labels = ['18-21', '21-30', '30-40', '40+']
-    pred_universe['age_group'] = pd.cut(pred_universe['age_at_arrest'], bins=bins, labels=labels, right=False)
-
-    # Plot histogram with age groups
-    sns.histplot(data=pred_universe, 
-                 x='age_at_arrest',
-                 hue='age_group',
-                 multiple='stack')
-    plt.title('Histogram of Age at Arrest by Age Groups')
-    plt.savefig('./data/part3_plots/histogram_age_at_arrest_by_groups.png', bbox_inches='tight')
-    plt.close()
 

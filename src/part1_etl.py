@@ -4,7 +4,7 @@ PART 1: ETL
 - NOTE: You will update this code for PART 4: CATEGORICAL PLOTS
 '''
 
-import pandas as pd
+import pandas as pd 
 
 def extract_transform():
     """
