@@ -4,7 +4,6 @@
 - Run main.py before you start
 '''
 
-
 import src.part1_etl as part1
 import src.part2_plot_examples as part2
 import src.part3_bar_hist as part3
