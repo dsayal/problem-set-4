@@ -10,11 +10,13 @@ import src.part3_bar_hist as part3
 import src.part4_catplot as part4
 import src.part5_scatter as part5
 
+import pandas as pd
+
 def main():
     ##  PART 1: ETL  ##
     # ETL the datasets into dataframes
     pred_universe, arrest_events, charge_counts, charge_counts_by_offense = part1.extract_transform()
-    
+
     ##  PART 2: PLOT EXAMPLES  ##
     # Apply plot theme
     part2.seaborn_settings()
@@ -26,26 +28,29 @@ def main():
     part2.scatterplot(pred_universe)
 
     ##  PART 3: BAR PLOTS AND HISTOGRAMS  ##
-    # 1
-
-    # 2
-
-    # 3
-
-    # 4
+    # Create bar plots and histograms
+    part3.part3_bar_plots(pred_universe)
+    part3.part3_histograms(pred_universe)
 
     ##  PART 4: CATEGORICAL PLOTS  ##
-    # 1
+    # 1. Create felony_charge dataframe
+    felony_charge = arrest_events.groupby('arrest_id').apply(lambda x: pd.Series({
+        'has_felony_charge': (x['charge_degree'] == 'Felony').any()
+    })).reset_index()
     
-    # 2
+    # 2. Merge felony_charge with pred_universe
+    merged_df = pd.merge(pred_universe, felony_charge, on='arrest_id', how='left')
 
-    # 3
+    # 3. Generate categorical plots
+    part4.catplot_felony_prediction(merged_df)
+    part4.catplot_nonfelony_prediction(merged_df)
+    part4.catplot_felony_prediction_hue(merged_df)
 
     ##  PART 5: SCATTERPLOTS  ##
-    # 1
-    
-    # 2
-
+    # Generate scatter plots
+    part5.scatterplot_felony_vs_nonfelony(merged_df)
+    part5.scatterplot_felony_prediction_vs_actual_rearrest(merged_df)
 
 if __name__ == "__main__":
     main()
+
